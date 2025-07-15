@@ -1,0 +1,84 @@
+<%- include('partials/header', { title: 'Profile', user: user }) %>
+
+<div class="container mt-5 text-dark">
+  <!-- Profile Header -->
+  <div class="row align-items-center mb-4 border-bottom pb-4">
+    <div class="col-md-3 text-center mb-3 mb-md-0">
+      <% if (user.profilePicture && user.profilePicture.url) { %>
+      <img
+        src="<%= user.profilePicture.url %>"
+        alt="Profile Picture"
+        class="rounded-circle border border-3 border-info"
+        style="width: 130px; height: 130px; object-fit: cover"
+      />
+      <% } else { %>
+      <div
+        class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white"
+        style="width: 130px; height: 130px"
+      >
+        <i class="fas fa-user fa-3x"></i>
+      </div>
+      <% } %>
+    </div>
+    <div class="col-md-7">
+      <h3 class="mb-1"><%= user.username %></h3>
+      <% if (user.bio) { %>
+      <p class="text-muted fst-italic"><%= user.bio %></p>
+      <% } %>
+      <p class="mb-1"><i class="fas fa-envelope"></i> <%= user.email %></p>
+      <p class="mb-0">
+        <i class="fas fa-calendar-alt"></i> Joined on <%=
+        user.createdAt.toDateString() %>
+      </p>
+    </div>
+    <div class="col-md-2 text-end">
+      <a href="/user/edit" class="btn btn-outline-info">
+        <i class="fas fa-user-edit"></i> Edit
+      </a>
+    </div>
+  </div>
+
+  <!-- Posts Section -->
+  <h5 class="mb-3">My Posts (<%= postCount %>)</h5>
+  <% if (posts && posts.length > 0) { %>
+  <div class="row g-3">
+    <% posts.forEach(post => { %>
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card bg-white border-0 shadow-sm h-100 hover-zoom text-dark">
+        <% if (post.images && post.images.length > 0) { %>
+        <img
+          src="<%= post.images[0].url %>"
+          class="card-img-top"
+          alt="Post Image"
+          style="object-fit: cover; height: 200px"
+        />
+        <% } else { %>
+        <img
+          src="/images/placeholder.png"
+          class="card-img-top"
+          alt="No image"
+          style="object-fit: cover; height: 200px"
+        />
+        <% } %>
+
+        <div class="card-body p-2">
+          <h6 class="card-title text-truncate mb-0"><%= post.title %></h6>
+        </div>
+        <a href="/posts/<%= post._id %>" class="stretched-link"></a>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <p class="text-muted">You haven’t posted anything yet.</p>
+  <% } %>
+</div>
+
+<style>
+  .hover-zoom:hover {
+    transform: scale(1.02);
+    transition: all 0.3s ease;
+  }
+</style>
+
+<%- include('partials/footer') %>

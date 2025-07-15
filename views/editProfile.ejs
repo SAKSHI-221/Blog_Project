@@ -1,0 +1,147 @@
+<%- include('partials/header', { title: 'Edit Profile', user: user }) %>
+
+<div class="container mt-5">
+  <div class="card shadow-lg border-0">
+    <div
+      class="card-header bg-gradient text-white d-flex justify-content-between align-items-center"
+      style="background: linear-gradient(90deg, #007bff, #6610f2)"
+    >
+      <h2 class="mb-0">Edit Profile</h2>
+      <a href="/user/profile" class="btn btn-light btn-sm">← Back to Profile</a>
+    </div>
+    <div class="card-body">
+      <form
+        action="/user/edit"
+        method="POST"
+        enctype="multipart/form-data"
+        onsubmit="return validateForm()"
+      >
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            id="username"
+            value="<%= user.username %>"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            id="email"
+            value="<%= user.email %>"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="bio" class="form-label">Bio</label>
+          <textarea
+            class="form-control"
+            name="bio"
+            id="bio"
+            rows="3"
+            placeholder="Tell us something about yourself..."
+          >
+<%= user.bio %></textarea
+          >
+        </div>
+
+        <div class="mb-3">
+          <label for="profilePicture" class="form-label"
+            >Profile Picture (optional)</label
+          >
+          <input
+            class="form-control"
+            type="file"
+            name="profilePicture"
+            id="profilePicture"
+            accept="image/jpeg,image/jpg,image/png"
+            onchange="previewImage()"
+          />
+
+          <div class="mt-3">
+            <% if (user.profilePicture && user.profilePicture.url) { %>
+            <img
+              src="<%= user.profilePicture.url %>"
+              alt="Profile Picture"
+              class="img-thumbnail"
+              id="currentProfilePicture"
+              style="max-width: 150px"
+            />
+            <% } %>
+            <img
+              id="image-preview"
+              class="img-thumbnail mt-2"
+              style="max-width: 150px; display: none"
+            />
+          </div>
+        </div>
+        <div
+          id="file-error"
+          class="text-danger mt-1"
+          style="display: none"
+        ></div>
+
+        <button type="submit" class="btn btn-primary w-100">
+          <i class="fas fa-save"></i> Update Profile
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function previewImage() {
+    const preview = document.getElementById("image-preview");
+    const file = document.getElementById("profilePicture").files[0];
+    const currentImage = document.getElementById("currentProfilePicture");
+
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = "block";
+      if (currentImage) {
+        currentImage.style.display = "none";
+      }
+    } else {
+      preview.style.display = "none";
+      if (currentImage) {
+        currentImage.style.display = "block";
+      }
+    }
+  }
+
+  function validateForm() {
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const fileInput = document.getElementById("profilePicture");
+    const file = fileInput.files[0];
+    const fileError = document.getElementById("file-error");
+
+    fileError.style.display = "none";
+    fileError.innerText = "";
+
+    if (!username || !email) {
+      alert("Username and Email are required.");
+      fileError.style.display = "block";
+      return false;
+    }
+    if (file) {
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (!allowedTypes.includes(file.type)) {
+        fileError.innerText = "Only JPG and PNG formats are supported.";
+        fileError.style.display = "block";
+        return false;
+      }
+    }
+    return true;
+  }
+</script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,55 @@
+<%- include('partials/header', { title: 'Login', user: null }) %>
+
+<div
+  class="container d-flex justify-content-center align-items-center"
+  style="min-height: 90vh"
+>
+  <div
+    class="card bg-dark text-light shadow-lg p-4"
+    style="width: 100%; max-width: 400px"
+  >
+    <h2 class="text-center mb-4">Login to Your Account</h2>
+    <% if (error) { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <%= error %>
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <% } %>
+    <form action="/auth/login" method="POST">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control bg-secondary text-white"
+          id="email"
+          name="email"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control bg-secondary text-white"
+          id="password"
+          name="password"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+    <div class="text-center mt-3">
+      <p>
+        Don't have an account?
+        <a href="/register" class="text-info">Register here</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
